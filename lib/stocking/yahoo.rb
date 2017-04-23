@@ -17,10 +17,15 @@ module Stocking
 
     def fetch(ticker, url: build_url(ticker))
       ticker_cache[ticker] ||= begin
-                  browser = Watir::Browser.start(url)
-                  trs = browser.elements(:css, 'section > div > table > tbody > tr')
-                  trs.map { |tr| tr.elements(:css, 'td').map(&:text) }
-                end
+                                 $stderr.puts "starting browser: #{url}"
+                                 browser = Watir::Browser.start(url)
+                                 $stderr.puts 'getting TRs...'
+                                 trs = browser.elements(:css, 'section > div > table > tbody > tr')
+                                 $stderr.puts 'getting texts...'
+                                 trs.map { |tr| tr.elements(:css, 'td').map(&:text) }.tap do
+                                   $stderr.puts 'done'
+                                 end
+                               end
     end
   end
 end
